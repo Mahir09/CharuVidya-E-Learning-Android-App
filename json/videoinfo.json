@@ -1,0 +1,47 @@
+[
+  {
+    "title": "Topic 1",
+    "time": "45 seconds",
+    "thumbnail": "assets/images/c.jpeg",
+    "videoUrl": "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
+    "sessionTitle": "Introduction to Kruskal Algorithm",
+    "sessionDescription": "Kruskal's ",
+    "sessionVideo": "https://charuvidya-charusat.s3.amazonaws.com/vaishalikoria/vaishalikoria_1567542295.mp4",
+    "sessionResource": "MS Team",
+    "quizLink": "NA"
+  },
+  {
+    "title": "Topic 2",
+    "time": "55 seconds",
+    "thumbnail": "assets/images/c.jpeg",
+    "videoUrl": "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
+    "sessionTitle": "Introduction to Kruskal Algorithm",
+    "sessionDescription": "Minimum ",
+    "sessionVideo": "https://charuvidya-charusat.s3.amazonaws.com/vaishalikoria/vaishalikoria_1567542295.mp4",
+    "sessionResource": "MS Team",
+    "quizLink": "NA"
+  },
+  {
+    "title": "Topic 4",
+    "time": "60 seconds",
+    "thumbnail": "assets/images/c.jpeg",
+    "videoUrl": "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
+    "sessionTitle": "Introduction to Kruskal Algorithm",
+    "sessionDescription": "Spanning",
+    "sessionVideo": "https://charuvidya-charusat.s3.amazonaws.com/vaishalikoria/vaishalikoria_1567542295.mp4",
+    "sessionResource": "MS Team",
+    "quizLink": "NA"
+  },
+  {
+    "title": "Topic 5",
+    "time": "120 seconds",
+    "thumbnail": "assets/images/c.jpeg",
+    "videoUrl": "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
+    "sessionTitle": "Introduction to Kruskal Algorithm",
+    "sessionDescription": "Tree Algorithm",
+    "sessionVideo": "https://charuvidya-charusat.s3.amazonaws.com/vaishalikoria/vaishalikoria_1567542295.mp4",
+    "sessionResource": "MS Team",
+    "quizLink": "NA"
+  }
+
+]
