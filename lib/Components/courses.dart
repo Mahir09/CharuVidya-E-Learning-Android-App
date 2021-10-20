@@ -12,7 +12,6 @@ class Courses extends StatefulWidget {
 }
 
 class _CoursesState extends State<Courses> {
-
   @override
   Widget build(BuildContext context) {
     print(widget.coursesData);
@@ -49,7 +48,7 @@ class CustomGridView extends StatelessWidget {
       : super();
 
   final int columnRatio;
-  List jsondata;
+  var jsondata;
 
   @override
   Widget build(BuildContext context) {
@@ -58,20 +57,24 @@ class CustomGridView extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Center(child: Text('Home')),
       ),
-      body: GestureDetector(
-        onTap: (){
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              fullscreenDialog: false,
-              // builder: (context) => CourseDetail('Java Programming Language', 'Minal', '4.5', '2,000', '499', 'assets/images/java.jpeg'),
-              builder: (context) => CourseDetail(courseData: jsondata,),
-            ),
-          );
-        },
-        child: StaggeredGridView.countBuilder(
-          primary: false,
-          crossAxisCount: 12,
-          itemBuilder: (context, index) => Container(
+      body: StaggeredGridView.countBuilder(
+        primary: false,
+        crossAxisCount: 12,
+        itemBuilder: (context, index) => GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                fullscreenDialog: false,
+                // builder: (context) => CourseDetail('Java Programming Language', 'Minal', '4.5', '2,000', '499', 'assets/images/java.jpeg'),
+                builder: (context) => CourseDetail(
+                  courseData: jsondata[index],
+
+                ),
+              ),
+            );
+            // print("INDEXxxxxxxxxxxxx >>> ${jsondata[index]}");
+          },
+          child: Container(
             // decoration: BoxDecoration(
             //     color: _myColorList[random.nextInt(_myColorList.length)],
             //     borderRadius: BorderRadius.circular(4),
@@ -97,7 +100,8 @@ class CustomGridView extends StatelessWidget {
                   // leading: FlutterLogo(),
                   title: Text(
                     jsondata[index]['courseTitle'].length > 20
-                        ? jsondata[index]['courseTitle'].substring(0, 20) + '...'
+                        ? jsondata[index]['courseTitle'].substring(0, 20) +
+                            '...'
                         : jsondata[index]['courseTitle'],
                   ),
                   // title: Text(jsondata[index]['courseTitle']),
@@ -107,9 +111,9 @@ class CustomGridView extends StatelessWidget {
               )
             ]),
           ),
-          staggeredTileBuilder: (index) => StaggeredTile.fit(columnRatio),
-          itemCount: jsondata == null ? 0 : jsondata.length,
         ),
+        staggeredTileBuilder: (index) => StaggeredTile.fit(columnRatio),
+        itemCount: jsondata == null ? 0 : jsondata.length,
       ),
     );
   }

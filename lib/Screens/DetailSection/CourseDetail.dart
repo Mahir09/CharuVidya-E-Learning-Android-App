@@ -1,12 +1,16 @@
 import 'dart:convert';
+import 'package:charuvidya/Classes/CourseSection.dart';
+import 'package:charuvidya/Classes/CourseSession.dart';
 import 'package:charuvidya/Components/constatns.dart' as color;
 import 'package:charuvidya/Components/video_items.dart';
+import 'package:charuvidya/Secure/Secure_id_token.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
+import 'package:http/http.dart' as http;
 
 class CourseDetail extends StatefulWidget {
-  final List courseData;
+  final courseData;
 
   const CourseDetail({Key key, this.courseData}) : super(key: key);
 
@@ -15,24 +19,70 @@ class CourseDetail extends StatefulWidget {
 }
 
 class _CourseDetailState extends State<CourseDetail> {
-  List videoInfo = [];
+  // _CourseDetailState()  {
+  //   url =
+  //       "http://117.239.83.200:9000/api/course/${widget.courseData["id"]}/course-sections-sessions";
+  //
+  //
+  // }
+
+  int courseId = 0;
+  String url;
+  // List videoInfo = [];
   bool _isPlaying = false;
   bool _dispose = false;
   int _isPlayingIndex = 0;
   VideoPlayerController _controller;
 
+  String IDtoken = "";
+  final storage = new UserSecureStorage(key: "id_token");
+
+  Map<String, dynamic> data;
+
+  List videoInfo = [];
+
   _initData() async {
-    await DefaultAssetBundle.of(context)
-        .loadString("json/videoinfo.json")
-        .then((value) {
+    final jwt = await storage.getIdToken();
+    IDtoken = jwt;
+
+    // await DefaultAssetBundle.of(context)
+    //     .loadString("json/videoinfo.json")
+    //     .then((value) {
+    //   setState(() {
+    //     videoInfo = json.decode(value);
+    //   });
+    // });
+    // print("WWWWWWWWWWWWWWWWW >>>> ${widget.courseData["id"]}");
+    final response = await http.get(
+        "http://117.239.83.200:9000/api/course/${widget.courseData["id"]}/course-sections-sessions",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $IDtoken',
+        });
+    print("RRRRRRRRRRRRRRRRRR  >>>> ${response.body}");
+    if (response.body.isNotEmpty) {
       setState(() {
-        videoInfo = json.decode(value);
+        data = json.decode(response.body);
       });
+    }
+    print("RRRRRRRRRRRRRRRRRR  >>>> ${data}");
+
+    data.forEach((key, value) {
+      setState(() {
+        // List temp = json.decode(value);
+        // List<CourseSession> list = temp.map((val) =>  CourseSession.fromJson(val)).toList();
+        videoInfo.addAll(value);
+      });
+
     });
+    print("SSSSSSSSSSSSSSSSSSSS >> $videoInfo");
   }
 
   @override
   void initState() {
+    // print(
+    //     "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA >>>>>>>>>  ${widget.courseData}");
     super.initState();
     _initData();
   }
@@ -159,7 +209,7 @@ class _CourseDetailState extends State<CourseDetail> {
                       children: [
                         Container(
                           child: Text(
-                            videoInfo[_isPlayingIndex]["sessionResource"],
+                            (videoInfo[_isPlayingIndex]["sessionResource"]) != null ? videoInfo[_isPlayingIndex]["sessionResource"] : "",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
@@ -169,7 +219,7 @@ class _CourseDetailState extends State<CourseDetail> {
                         ),
                         Container(
                           child: Text(
-                            videoInfo[_isPlayingIndex]["quizLink"],
+                            (videoInfo[_isPlayingIndex]["quizLink"]) != null ? videoInfo[_isPlayingIndex]["quizLink"] : "",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
@@ -188,7 +238,7 @@ class _CourseDetailState extends State<CourseDetail> {
 
   _playView(BuildContext context) {
     if (_controller == null) {
-      _controller = VideoPlayerController.network(videoInfo[0]["videoUrl"]);
+      _controller = VideoPlayerController.network(videoInfo[0]["sessionVideo"]);
     }
     final controller = _controller;
     if (controller != null && controller.value.isInitialized) {
@@ -225,8 +275,9 @@ class _CourseDetailState extends State<CourseDetail> {
   }
 
   _onTapVideo(int index) {
+    print("IIIIIIIIIIIIIIIIIIIII  >> ${videoInfo[index]["sessionVideo"]}");
     final controller =
-        VideoPlayerController.network(videoInfo[index]["videoUrl"]);
+        VideoPlayerController.network(videoInfo[index]["sessionVideo"]);
     final old = _controller;
     _controller = controller;
     if (old != null) {
@@ -259,7 +310,7 @@ class _CourseDetailState extends State<CourseDetail> {
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
                     image: AssetImage(
-                      videoInfo[index]["thumbnail"],
+                      "assets/c.jpeg",
                     ),
                     fit: BoxFit.fill,
                   ),
