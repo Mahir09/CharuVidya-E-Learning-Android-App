@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Home(),
           Search(),
           MyCourse(),
-          Wishlist(),
+          // Wishlist(),
           Account(),
         ],
       ),
@@ -77,14 +77,14 @@ class _HomeScreenState extends State<HomeScreen> {
               "My Course",
             ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              EvaIcons.heart,
-            ),
-            title: Text(
-              "Wishlist",
-            ),
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //     EvaIcons.heart,
+          //   ),
+          //   title: Text(
+          //     "Wishlist",
+          //   ),
+          // ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.account_box,

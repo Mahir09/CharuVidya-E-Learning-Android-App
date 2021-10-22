@@ -74,7 +74,6 @@ class _CourseDetailState extends State<CourseDetail> {
         // List<CourseSession> list = temp.map((val) =>  CourseSession.fromJson(val)).toList();
         videoInfo.addAll(value);
       });
-
     });
     print("SSSSSSSSSSSSSSSSSSSS >> $videoInfo");
   }
@@ -98,130 +97,146 @@ class _CourseDetailState extends State<CourseDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          actions: <Widget>[
-            Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Icon(
-                    Icons.share_outlined,
-                    size: 26.0,
-                  ),
-                )),
-            Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Icon(
-                    Icons.add_shopping_cart_outlined,
-                    size: 26.0,
-                  ),
-                )),
-          ],
-        ),
-        body: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 200,
-              child: _controller != null ? _playView(context) : _onTapVideo(0),
-            ),
-            SizedBox(
-              height: 75,
-              child: AppBar(
-                bottom: TabBar(
-                  tabs: [
-                    Tab(
-                      icon: Icon(
-                        Icons.featured_play_list_outlined,
-                        size: 18,
-                      ),
-                      text: "Playlist",
-                    ),
-                    Tab(
-                      icon: Icon(
-                        Icons.details_outlined,
-                        size: 18,
-                      ),
-                      text: "Description",
-                    ),
-                    Tab(
-                      icon: Icon(
-                        Icons.link_outlined,
-                        size: 18,
-                      ),
-                      text: "Resources",
-                    ),
-                  ],
-                ),
+    return (data != null)
+        ? DefaultTabController(
+            length: 3,
+            child: Scaffold(
+              appBar: AppBar(
+                actions: <Widget>[
+                  Padding(
+                      padding: EdgeInsets.only(right: 20.0),
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Icon(
+                          Icons.share_outlined,
+                          size: 26.0,
+                        ),
+                      )),
+                  Padding(
+                      padding: EdgeInsets.only(right: 20.0),
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Icon(
+                          Icons.add_shopping_cart_outlined,
+                          size: 26.0,
+                        ),
+                      )),
+                ],
               ),
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius:
-                              BorderRadius.only(topRight: Radius.circular(70))),
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 8),
-                              itemCount: videoInfo.length,
-                              itemBuilder: (_, int index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    _onTapVideo(index);
-                                    debugPrint(index.toString());
-                                  },
-                                  child: _listView(index),
-                                );
-                              },
+              body: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 200,
+                    child: _controller != null
+                        ? _playView(context)
+                        : _onTapVideo(0),
+                  ),
+                  SizedBox(
+                    height: 75,
+                    child: AppBar(
+                      bottom: TabBar(
+                        tabs: [
+                          Tab(
+                            icon: Icon(
+                              Icons.featured_play_list_outlined,
+                              size: 18,
                             ),
+                            text: "Playlist",
+                          ),
+                          Tab(
+                            icon: Icon(
+                              Icons.details_outlined,
+                              size: 18,
+                            ),
+                            text: "Description",
+                          ),
+                          Tab(
+                            icon: Icon(
+                              Icons.link_outlined,
+                              size: 18,
+                            ),
+                            text: "Resources",
                           ),
                         ],
                       ),
                     ),
                   ),
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                        videoInfo[_isPlayingIndex]["sessionDescription"],
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  Expanded(
+                    child: TabBarView(
                       children: [
-                        Container(
-                          child: Text(
-                            (videoInfo[_isPlayingIndex]["sessionResource"]) != null ? videoInfo[_isPlayingIndex]["sessionResource"] : "",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(70))),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.vertical,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 8),
+                                    itemCount: videoInfo.length,
+                                    itemBuilder: (_, int index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          _onTapVideo(index);
+                                          debugPrint(index.toString());
+                                        },
+                                        child: _listView(index),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
                         Container(
-                          child: Text(
-                            (videoInfo[_isPlayingIndex]["quizLink"]) != null ? videoInfo[_isPlayingIndex]["quizLink"] : "",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              videoInfo[_isPlayingIndex]["sessionDescription"],
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: Text(
+                                  (videoInfo[_isPlayingIndex]
+                                              ["sessionResource"]) !=
+                                          null
+                                      ? videoInfo[_isPlayingIndex]
+                                          ["sessionResource"]
+                                      : "",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                child: Text(
+                                  (videoInfo[_isPlayingIndex]["quizLink"]) !=
+                                          null
+                                      ? videoInfo[_isPlayingIndex]["quizLink"]
+                                      : "",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -230,10 +245,8 @@ class _CourseDetailState extends State<CourseDetail> {
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          )
+        : Center(child: CircularProgressIndicator());
   }
 
   _playView(BuildContext context) {

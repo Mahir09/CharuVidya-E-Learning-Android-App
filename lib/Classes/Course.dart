@@ -1,7 +1,8 @@
 import 'package:charuvidya/Classes/CourseCategory.dart';
 import 'package:charuvidya/Classes/CourseLevel.dart';
 import 'package:charuvidya/Classes/user.dart';
-
+// /course/{courseId}/course-sections-sessions
+// /course/3/course-sections-session
 class Course {
   int id;
   String courseTitle;
