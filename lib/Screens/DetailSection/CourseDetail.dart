@@ -19,16 +19,8 @@ class CourseDetail extends StatefulWidget {
 }
 
 class _CourseDetailState extends State<CourseDetail> {
-  // _CourseDetailState()  {
-  //   url =
-  //       "http://117.239.83.200:9000/api/course/${widget.courseData["id"]}/course-sections-sessions";
-  //
-  //
-  // }
-
   int courseId = 0;
   String url;
-  // List videoInfo = [];
   bool _isPlaying = false;
   bool _dispose = false;
   int _isPlayingIndex = 0;
@@ -44,15 +36,6 @@ class _CourseDetailState extends State<CourseDetail> {
   _initData() async {
     final jwt = await storage.getIdToken();
     IDtoken = jwt;
-
-    // await DefaultAssetBundle.of(context)
-    //     .loadString("json/videoinfo.json")
-    //     .then((value) {
-    //   setState(() {
-    //     videoInfo = json.decode(value);
-    //   });
-    // });
-    // print("WWWWWWWWWWWWWWWWW >>>> ${widget.courseData["id"]}");
     final response = await http.get(
         "http://117.239.83.200:9000/api/course/${widget.courseData["id"]}/course-sections-sessions",
         headers: {
@@ -70,8 +53,6 @@ class _CourseDetailState extends State<CourseDetail> {
 
     data.forEach((key, value) {
       setState(() {
-        // List temp = json.decode(value);
-        // List<CourseSession> list = temp.map((val) =>  CourseSession.fromJson(val)).toList();
         videoInfo.addAll(value);
       });
     });
@@ -126,7 +107,7 @@ class _CourseDetailState extends State<CourseDetail> {
               body: Column(
                 children: <Widget>[
                   SizedBox(
-                    height: 200,
+                    height: 250,
                     child: _controller != null
                         ? _playView(context)
                         : _onTapVideo(0),
@@ -216,7 +197,7 @@ class _CourseDetailState extends State<CourseDetail> {
                                           null
                                       ? videoInfo[_isPlayingIndex]
                                           ["sessionResource"]
-                                      : "",
+                                      : "No Resources Available",
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
@@ -230,7 +211,7 @@ class _CourseDetailState extends State<CourseDetail> {
                                   (videoInfo[_isPlayingIndex]["quizLink"]) !=
                                           null
                                       ? videoInfo[_isPlayingIndex]["quizLink"]
-                                      : "",
+                                      : "No Quiz's Available",
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
@@ -309,60 +290,138 @@ class _CourseDetailState extends State<CourseDetail> {
   }
 
   _listView(int index) {
-    return Container(
-      height: 120,
-      width: 200,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    image: AssetImage(
-                      "assets/c.jpeg",
+    return (_isPlayingIndex == index)
+        ? Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Card(
+              elevation: 5,
+              color: Colors.grey,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Colors.grey[800], width: 1.5),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Container(
+                height: 95,
+                width: 200,
+                padding: EdgeInsets.only(left: 5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                "assets/c.jpeg",
+                              ),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              videoInfo[index]["sessionTitle"]
+                                          .toString()
+                                          .length >
+                                      25
+                                  ? videoInfo[index]["sessionTitle"]
+                                          .toString()
+                                          .substring(0, 25) +
+                                      '...'
+                                  : videoInfo[index]["sessionTitle"],
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            // SizedBox(
+                            //   height: 10,
+                            // ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(top: 3),
+                            //   child: Text(
+                            //     videoInfo[index]["time"],
+                            //     style:
+                            //         TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            //   ),
+                            // ),
+                          ],
+                        )
+                      ],
                     ),
-                    fit: BoxFit.fill,
-                  ),
+                  ],
                 ),
               ),
-              SizedBox(
-                width: 10,
-              ),
-              Column(
+            ),
+          )
+        : Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Container(
+              height: 95,
+              width: 200,
+              padding: EdgeInsets.only(left: 5),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    videoInfo[index]["sessionTitle"].toString().length > 25
-                        ? videoInfo[index]["sessionTitle"]
-                                .toString()
-                                .substring(0, 25) +
-                            '...'
-                        : videoInfo[index]["sessionTitle"],
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Row(
+                    children: [
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: AssetImage(
+                              "assets/c.jpeg",
+                            ),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            videoInfo[index]["sessionTitle"].toString().length >
+                                    25
+                                ? videoInfo[index]["sessionTitle"]
+                                        .toString()
+                                        .substring(0, 25) +
+                                    '...'
+                                : videoInfo[index]["sessionTitle"],
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          // SizedBox(
+                          //   height: 10,
+                          // ),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(top: 3),
+                          //   child: Text(
+                          //     videoInfo[index]["time"],
+                          //     style:
+                          //         TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          //   ),
+                          // ),
+                        ],
+                      )
+                    ],
                   ),
-                  // SizedBox(
-                  //   height: 10,
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(top: 3),
-                  //   child: Text(
-                  //     videoInfo[index]["time"],
-                  //     style:
-                  //         TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  //   ),
-                  // ),
                 ],
-              )
-            ],
-          ),
-        ],
-      ),
-    );
+              ),
+            ),
+          );
   }
 }
 
