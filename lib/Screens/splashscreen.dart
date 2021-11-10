@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'package:charuvidya/Screens/HomeScreen/Home.dart';
+import 'package:charuvidya/Screens/HomeScreen/HomeScreen.dart';
 import 'package:charuvidya/Screens/landingpage.dart';
+import 'package:charuvidya/Secure/Secure_id_token.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -10,17 +13,26 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final storage = new UserSecureStorage(key: "id_token");
+  String jwt_token;
+
   @override
-  void initState() {
+  void initState()  {
+    init();
     Timer(
       Duration(seconds: 3),
       () => Navigator.pushReplacement(
         context,
         PageTransition(
-            child: LandingPage(), type: PageTransitionType.rightToLeftWithFade),
+            child: (jwt_token != null) ? HomeScreen() : IntroScreen(), type: PageTransitionType.rightToLeftWithFade),
+            // child: LandingPage(), type: PageTransitionType.rightToLeftWithFade),
       ),
     );
     super.initState();
+  }
+
+  Future init() async {
+    jwt_token = await storage.getIdToken();
   }
 
   @override

@@ -11,14 +11,30 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'CharuVidya',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: SplashScreen()
-      //   home: HomeScreen(),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'CharuVidya',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          inputDecorationTheme: InputDecorationTheme(
+            filled: true,
+            fillColor: Color(0xfff2f9fe),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey[200]),
+              borderRadius: BorderRadius.circular(25),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey[200]),
+              borderRadius: BorderRadius.circular(25),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey[200]),
+              borderRadius: BorderRadius.circular(25),
+            ),
+          ),
+        ),
+        home: SplashScreen()
+        //   home: HomeScreen(),
+        );
   }
 }

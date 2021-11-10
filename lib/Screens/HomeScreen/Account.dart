@@ -4,6 +4,7 @@ import 'package:charuvidya/Screens/landingpage.dart';
 import 'package:charuvidya/Secure/Secure_id_token.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,6 +14,8 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> {
+  FlutterSecureStorage mainStorage = FlutterSecureStorage();
+
   String url = "http://117.239.83.200:9000/api/account";
   String IDtoken = "";
   bool imageUrl = false;
@@ -51,6 +54,46 @@ class _AccountState extends State<Account> {
         imageUrl = true;
       });
     }
+  }
+
+  Future<void> _showMyDialog(String title, String discription) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(discription),
+                // Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancle'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Ok'),
+              onPressed: () {
+                mainStorage.delete(key: 'id_token');
+                Navigator.pushReplacement(
+                  context,
+                  PageTransition(
+                      child: IntroScreen(),
+                      type: PageTransitionType.bottomToTop),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -208,12 +251,14 @@ class _AccountState extends State<Account> {
             Center(
               child: MaterialButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    PageTransition(
-                        child: LandingPage(),
-                        type: PageTransitionType.bottomToTop),
-                  );
+                  // mainStorage.delete(key: 'id_token');
+                  // Navigator.pushReplacement(
+                  //   context,
+                  //   PageTransition(
+                  //       child: IntroScreen(),
+                  //       type: PageTransitionType.bottomToTop),
+                  // );
+                  _showMyDialog("Confirm", "Are You Sure You Want To Logout?");
                 },
                 child:
                     Text('Sign Out', style: TextStyle(color: Colors.lightBlue)),
