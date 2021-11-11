@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:charuvidya/Components/courses.dart';
+import 'package:charuvidya/Components/fieldCategory.dart';
 import 'package:charuvidya/Screens/DetailSection/CourseDetail.dart';
 import 'package:charuvidya/Secure/Secure_id_token.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -18,7 +19,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String url = "http://117.239.83.200:9000/api/courses/top-10";
+  // String url = "http://117.239.83.200:9000/api/courses/top-10";
+  String url =
+      "http://117.239.83.200:9000/api/course-category/parent-categories";
   String IDtoken = "";
   var data;
 
@@ -32,17 +35,17 @@ class _HomeState extends State<Home> {
   Future init() async {
     final jwt = await storage.getIdToken();
     IDtoken = jwt;
-    // print("JWT >> $jwt");
+    print("JWT >> $jwt");
     final response = await http.get(url, headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
+      'Authorization': 'Bearer $IDtoken',
     });
     print('JWT Token : ${IDtoken}');
     // print(json.decode(response.body));
     setState(() {
       data = json.decode(response.body);
     });
-
   }
 
   // Future save() async {
@@ -85,48 +88,56 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     // print(data);
-    return Courses(coursesData: data);
-    // return LayoutBuilder(
-    //   builder: (context, dimens) {
-    //     if (dimens.maxWidth <= 576) {
-    //       return CustomGridView(
-    //         columnRatio: 6,
-    //         jsondata: data,
-    //       );
-    //     } else if (dimens.maxWidth > 576 && dimens.maxWidth <= 1024) {
-    //       return CustomGridView(
-    //         columnRatio: 4,
-    //         jsondata: data,
-    //       );
-    //     } else if (dimens.maxWidth > 1024 && dimens.maxWidth <= 1366) {
-    //       return CustomGridView(
-    //         columnRatio: 3,
-    //         jsondata: data,
-    //       );
-    //     } else {
-    //       return CustomGridView(
-    //         columnRatio: 2,
-    //         jsondata: data,
-    //       );
-    //     }
-    //   },
-    // );
-
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: Text('Home'),
-    //   ),
-    //
-    //   body: new ListView.builder(
-    //     itemCount: data == null ? 0 : data.length,
-    //     itemBuilder: (BuildContext context, int index) {
-    //       return new Card(
-    //         child: new Text(data[index]["courseTitle"]),
-    //       );
-    //     },
-    //   ),
-    // );
+    return FieldCategory(
+      jsonData: data,
+    );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   // print(data);
+  //   return Courses(coursesData: data);
+  //   // return LayoutBuilder(
+  //   //   builder: (context, dimens) {
+  //   //     if (dimens.maxWidth <= 576) {
+  //   //       return CustomGridView(
+  //   //         columnRatio: 6,
+  //   //         jsondata: data,
+  //   //       );
+  //   //     } else if (dimens.maxWidth > 576 && dimens.maxWidth <= 1024) {
+  //   //       return CustomGridView(
+  //   //         columnRatio: 4,
+  //   //         jsondata: data,
+  //   //       );
+  //   //     } else if (dimens.maxWidth > 1024 && dimens.maxWidth <= 1366) {
+  //   //       return CustomGridView(
+  //   //         columnRatio: 3,
+  //   //         jsondata: data,
+  //   //       );
+  //   //     } else {
+  //   //       return CustomGridView(
+  //   //         columnRatio: 2,
+  //   //         jsondata: data,
+  //   //       );
+  //   //     }
+  //   //   },
+  //   // );
+  //
+  //   // return Scaffold(
+  //   //   appBar: AppBar(
+  //   //     title: Text('Home'),
+  //   //   ),
+  //   //
+  //   //   body: new ListView.builder(
+  //   //     itemCount: data == null ? 0 : data.length,
+  //   //     itemBuilder: (BuildContext context, int index) {
+  //   //       return new Card(
+  //   //         child: new Text(data[index]["courseTitle"]),
+  //   //       );
+  //   //     },
+  //   //   ),
+  //   // );
+  // }
 }
 
 // ignore: must_be_immutable
