@@ -55,46 +55,50 @@ class _SubFieldCategoryState extends State<SubFieldCategory> {
         automaticallyImplyLeading: false,
         title: Center(child: Text('Sub Fields')),
       ),
-      body: (data != null) ? ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: [
-                ListTile(
-                  title:
-                      Text("${data[index]['courseCategoryTitle'].toString()}",textAlign: TextAlign.center,),
-                ),
-                Text(
-                  'Count : ${Random().nextInt(20)}',
-                  style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                ),
-                ButtonBar(
-                  alignment: MainAxisAlignment.center,
-                  children: [
-                    FlatButton(
-                      textColor: const Color(0xFF6200EE),
-                      onPressed: () {
-                        print(index);
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            fullscreenDialog: false,
-                            builder: (context) => Courses(
-                              index: data[index]['id'],
-                            ),
+      body: (data != null)
+          ? ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: Text(
+                          "${data[index]['courseCategoryTitle'].toString()}",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Text(
+                        'Count : ${Random().nextInt(20)}',
+                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                      ),
+                      ButtonBar(
+                        alignment: MainAxisAlignment.center,
+                        children: [
+                          FlatButton(
+                            textColor: const Color(0xFF6200EE),
+                            onPressed: () {
+                              print(index);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  fullscreenDialog: false,
+                                  builder: (context) => Courses(
+                                    index: data[index]['id'],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: const Text('View'),
                           ),
-                        );
-                      },
-                      child: const Text('View'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-        itemCount: data == null ? 0 : data.length,
-      ) : Center(child: CircularProgressIndicator()),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+              itemCount: data == null ? 0 : data.length,
+            )
+          : Center(child: CircularProgressIndicator()),
     );
   }
 }
