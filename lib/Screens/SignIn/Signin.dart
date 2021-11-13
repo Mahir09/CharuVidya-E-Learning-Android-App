@@ -107,12 +107,17 @@ class _SingInState extends State<SignIn> {
           // return true;
         } else {
           await _storage.write(key: "id_token", value: data["id_token"]);
-          Navigator.push(
+          Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(
-              builder: (context) => HomeScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+                (Route<dynamic> route) => false,
           );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => HomeScreen(),
+          //   ),
+          // );
         }
       }
       // FacultyRoleAlert(data) != null ? print("Success") : print("Unsuccess");

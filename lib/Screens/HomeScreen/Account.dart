@@ -83,11 +83,16 @@ class _AccountState extends State<Account> {
               child: const Text('Ok'),
               onPressed: () {
                 mainStorage.delete(key: 'id_token');
-                Navigator.pushReplacement(
+                // Navigator.pushReplacement(
+                //   context,
+                //   PageTransition(
+                //       child: IntroScreen(),
+                //       type: PageTransitionType.bottomToTop),
+                // );
+                Navigator.pushAndRemoveUntil(
                   context,
-                  PageTransition(
-                      child: IntroScreen(),
-                      type: PageTransitionType.bottomToTop),
+                  MaterialPageRoute(builder: (context) => IntroScreen()),
+                  (Route<dynamic> route) => false,
                 );
               },
             ),
@@ -105,167 +110,172 @@ class _AccountState extends State<Account> {
         title: Center(child: Text('Account')),
         //backgroundColor: Colors.white,
       ),
-      body: (data != null) ? Container(
-        child: ListView(
-          children: [
-            SizedBox(
-              height: 15,
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 5,
-                ),
-                Icon(Icons.person, color: Color(0xff3C8CE7)),
-                SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  "Your Profile",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            CircleAvatar(
-              radius: 70,
-              backgroundColor: Colors.black,
-              child: CircleAvatar(
-                backgroundImage: (imageUrl)
-                    ? NetworkImage(data['imageUrl'])
-                    : AssetImage("assets/images/default_profile_img.jpg"),
-                radius: 65,
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
+      body: (data != null)
+          ? Container(
+              child: ListView(
                 children: [
-                  Text(
-                    'Email address: ${data['email']}',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 15,
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Icon(Icons.person, color: Color(0xff3C8CE7)),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        "Your Profile",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  CircleAvatar(
+                    radius: 70,
+                    backgroundColor: Colors.black,
+                    child: CircleAvatar(
+                      backgroundImage: (imageUrl)
+                          ? NetworkImage(data['imageUrl'])
+                          : AssetImage("assets/images/default_profile_img.jpg"),
+                      radius: 65,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Email address: ${data['email']}',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      //mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Username : ${data['firstName']} ${data['lastName']}',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Icon(Icons.settings, color: Color(0xff3C8CE7)),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        "Settings",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                            child: ChangePassword(),
+                            type: PageTransitionType.leftToRight),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Change Password",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Icon(Icons.arrow_forward_ios,
+                              color: Color(0xff3C8CE7))
+                        ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Edit Profile",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Icon(Icons.arrow_forward_ios,
+                              color: Color(0xff3C8CE7))
+                        ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _showMyDialog(
+                          "Confirm", "Are You Sure You Want To Logout?");
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Sign Out",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red,
+                            ),
+                          ),
+                          Icon(Icons.arrow_forward_ios, color: Colors.red)
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                //mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Username : ${data['firstName']} ${data['lastName']}',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 5,
-                ),
-                Icon(Icons.settings, color: Color(0xff3C8CE7)),
-                SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  "Settings",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  PageTransition(
-                      child: ChangePassword(),
-                      type: PageTransitionType.leftToRight),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Change Password",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Icon(Icons.arrow_forward_ios, color: Color(0xff3C8CE7))
-                  ],
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Edit Profile",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Icon(Icons.arrow_forward_ios, color: Color(0xff3C8CE7))
-                  ],
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                _showMyDialog("Confirm", "Are You Sure You Want To Logout?");
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Sign Out",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.red,
-                      ),
-                    ),
-                    Icon(Icons.arrow_forward_ios, color: Colors.red)
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ) : Center(child: CircularProgressIndicator()),
+            )
+          : Center(child: CircularProgressIndicator()),
     );
   }
 
