@@ -8,7 +8,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
 
 class Courses extends StatefulWidget {
-  // final coursesData;
 final index;
   Courses({Key key, this.index}) : super(key: key);
 

@@ -1,10 +1,7 @@
 import 'dart:convert';
-
 import 'package:charuvidya/Components/CustomGridView.dart';
-import 'package:charuvidya/Components/courses.dart';
 import 'package:charuvidya/Secure/Secure_id_token.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
 
 class MyCourse extends StatefulWidget {
@@ -18,6 +15,7 @@ class _MyCourseState extends State<MyCourse> {
   var data;
 
   final storage = new UserSecureStorage(key: "id_token");
+
   @override
   void initState() {
     super.initState();
@@ -34,7 +32,6 @@ class _MyCourseState extends State<MyCourse> {
       'Authorization': 'Bearer $IDtoken',
     });
     print('Token : ${IDtoken}');
-    // print(json.decode(response.body));
     setState(() {
       data = json.decode(response.body);
     });
@@ -42,7 +39,6 @@ class _MyCourseState extends State<MyCourse> {
 
   @override
   Widget build(BuildContext context) {
-    // print(data);
     return LayoutBuilder(
       builder: (context, dimens) {
         if (dimens.maxWidth <= 576) {
@@ -68,31 +64,5 @@ class _MyCourseState extends State<MyCourse> {
         }
       },
     );
-    // return Courses(coursesData: data);
-// return LayoutBuilder(
-    //   builder: (context, dimens) {
-    //     if (dimens.maxWidth <= 576) {
-    //       return CustomGridView(
-    //         columnRatio: 6,
-    //         jsondata: data,
-    //       );
-    //     } else if (dimens.maxWidth > 576 && dimens.maxWidth <= 1024) {
-    //       return CustomGridView(
-    //         columnRatio: 4,
-    //         jsondata: data,
-    //       );
-    //     } else if (dimens.maxWidth > 1024 && dimens.maxWidth <= 1366) {
-    //       return CustomGridView(
-    //         columnRatio: 3,
-    //         jsondata: data,
-    //       );
-    //     } else {
-    //       return CustomGridView(
-    //         columnRatio: 2,
-    //         jsondata: data,
-    //       );
-    //     }
-    //   },
-    // );
   }
 }

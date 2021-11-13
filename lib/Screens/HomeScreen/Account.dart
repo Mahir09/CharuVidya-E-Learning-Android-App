@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:charuvidya/Screens/HomeScreen/ChangePassword.dart';
-import 'package:charuvidya/Screens/landingpage.dart';
+import 'package:charuvidya/Screens/introscreen.dart';
 import 'package:charuvidya/Secure/Secure_id_token.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:page_transition/page_transition.dart';
@@ -22,7 +20,8 @@ class _AccountState extends State<Account> {
   bool imageUrl = false;
   var data;
 
-  final storage = new UserSecureStorage(key: "id_token");
+  final storageIdToken = new UserSecureStorage(key: "id_token");
+
   @override
   void initState() {
     super.initState();
@@ -30,9 +29,8 @@ class _AccountState extends State<Account> {
   }
 
   Future init() async {
-    final jwt = await storage.getIdToken();
+    final jwt = await storageIdToken.getIdToken();
     IDtoken = jwt;
-    // print("JWT >> $jwt");
     final response = await http.get(
       url,
       headers: {
@@ -41,15 +39,12 @@ class _AccountState extends State<Account> {
         'Authorization': 'Bearer $IDtoken',
       },
     );
-    // print('Token : ${IDtoken}');
-    // print(json.decode(response.body));
     if (response.body.isNotEmpty) {
       setState(() {
         data = json.decode(response.body);
       });
     }
     print(data);
-    // print(data["imageUrl"]);
     if (data["imageUrl"] != "") {
       setState(() {
         imageUrl = true;
@@ -68,7 +63,7 @@ class _AccountState extends State<Account> {
             child: ListBody(
               children: <Widget>[
                 Text(discription),
-                // Text('Would you like to approve of this message?'),
+                Text('Would you like to approve of this message?'),
               ],
             ),
           ),
@@ -83,12 +78,6 @@ class _AccountState extends State<Account> {
               child: const Text('Ok'),
               onPressed: () {
                 mainStorage.delete(key: 'id_token');
-                // Navigator.pushReplacement(
-                //   context,
-                //   PageTransition(
-                //       child: IntroScreen(),
-                //       type: PageTransitionType.bottomToTop),
-                // );
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => IntroScreen()),
@@ -278,178 +267,4 @@ class _AccountState extends State<Account> {
           : Center(child: CircularProgressIndicator()),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       automaticallyImplyLeading: false,
-  //       title: Center(child: Text('Account')),
-  //     ),
-  //     body: (data != null) ? SingleChildScrollView(
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           SizedBox(
-  //             height: 200,
-  //             width: 400,
-  //             child: Column(
-  //               mainAxisAlignment: MainAxisAlignment.center,
-  //               crossAxisAlignment: CrossAxisAlignment.center,
-  //               children: [
-  //                 CircleAvatar(
-  //                   radius: 70,
-  //                   backgroundColor: Colors.black,
-  //                   child: CircleAvatar(
-  //                     backgroundImage: (imageUrl)
-  //                         ? NetworkImage(data['imageUrl'])
-  //                         : AssetImage("assets/images/default_profile_img.jpg"),
-  //                     radius: 65,
-  //                   ),
-  //                 ),
-  //                 // : CircleAvatar(
-  //                 //     radius: 70,
-  //                 //     backgroundColor: Colors.black,
-  //                 //     child: CircleAvatar(
-  //                 //       backgroundImage: AssetImage("assets/images/default_profile_img.jpg"),
-  //                 //       radius: 65,
-  //                 //     ),
-  //                 //   ),
-  //                 Text(
-  //                   '${data['firstName']} ${data['lastName']}',
-  //                   style: TextStyle(
-  //                     color: Colors.black,
-  //                     fontSize: 24,
-  //                   ),
-  //                 ),
-  //                 Row(
-  //                   mainAxisAlignment: MainAxisAlignment.center,
-  //                   children: [
-  //                     // Icon(EvaIcons.google)
-  //                     Text(
-  //                       '${data['email']}',
-  //                       style: TextStyle(
-  //                         color: Colors.grey,
-  //                         fontSize: 20,
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //           Padding(
-  //             padding: const EdgeInsets.only(left: 2.0),
-  //             child: Text(
-  //               'Settings',
-  //               style: TextStyle(color: Colors.grey, fontSize: 14),
-  //             ),
-  //           ),
-  //           Padding(
-  //             padding: const EdgeInsets.fromLTRB(2, 5, 2, 1),
-  //             child: ListTile(
-  //               trailing: Icon(
-  //                 Icons.arrow_forward_ios,
-  //                 color: Colors.black,
-  //               ),
-  //               title: Text(
-  //                 'Option 1',
-  //                 style: TextStyle(
-  //                   color: Colors.black,
-  //                   fontSize: 20,
-  //                 ),
-  //               ),
-  //               tileColor: Colors.grey.shade300,
-  //             ),
-  //           ),
-  //           Padding(
-  //             padding: const EdgeInsets.fromLTRB(2, 1, 2, 1),
-  //             child: ListTile(
-  //               trailing: Icon(
-  //                 Icons.arrow_forward_ios,
-  //                 color: Colors.black,
-  //               ),
-  //               title: Text(
-  //                 'Option 2',
-  //                 style: TextStyle(
-  //                   color: Colors.black,
-  //                   fontSize: 20,
-  //                 ),
-  //               ),
-  //               tileColor: Colors.grey.shade300,
-  //             ),
-  //           ),
-  //           Padding(
-  //             padding: const EdgeInsets.fromLTRB(2, 1, 2, 1),
-  //             child: ListTile(
-  //               trailing: Icon(
-  //                 Icons.arrow_forward_ios,
-  //                 color: Colors.black,
-  //               ),
-  //               title: Text(
-  //                 'Option 3',
-  //                 style: TextStyle(
-  //                   color: Colors.black,
-  //                   fontSize: 20,
-  //                 ),
-  //               ),
-  //               tileColor: Colors.grey.shade300,
-  //             ),
-  //           ),
-  //           Padding(
-  //             padding: const EdgeInsets.fromLTRB(2, 1, 2, 1),
-  //             child: ListTile(
-  //               trailing: Icon(
-  //                 Icons.arrow_forward_ios,
-  //                 color: Colors.black,
-  //               ),
-  //               title: Text(
-  //                 'Option 4',
-  //                 style: TextStyle(
-  //                   color: Colors.black,
-  //                   fontSize: 20,
-  //                 ),
-  //               ),
-  //               tileColor: Colors.grey.shade300,
-  //             ),
-  //           ),
-  //           Padding(
-  //             padding: const EdgeInsets.fromLTRB(2, 1, 2, 1),
-  //             child: ListTile(
-  //               trailing: Icon(
-  //                 Icons.arrow_forward_ios,
-  //                 color: Colors.black,
-  //               ),
-  //               title: Text(
-  //                 'Option 5',
-  //                 style: TextStyle(
-  //                   color: Colors.black,
-  //                   fontSize: 20,
-  //                 ),
-  //               ),
-  //               tileColor: Colors.grey.shade300,
-  //             ),
-  //           ),
-  //           Center(
-  //             child: MaterialButton(
-  //               onPressed: () {
-  //                 // mainStorage.delete(key: 'id_token');
-  //                 // Navigator.pushReplacement(
-  //                 //   context,
-  //                 //   PageTransition(
-  //                 //       child: IntroScreen(),
-  //                 //       type: PageTransitionType.bottomToTop),
-  //                 // );
-  //                 _showMyDialog("Confirm", "Are You Sure You Want To Logout?");
-  //               },
-  //               child:
-  //                   Text('Sign Out', style: TextStyle(color: Colors.lightBlue)),
-  //             ),
-  //           )
-  //         ],
-  //       ),
-  //     ) : Center(child: CircularProgressIndicator()),
-  //   );
-  // }
 }

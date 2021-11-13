@@ -5,7 +5,7 @@ class CourseSession {
   String sessionTitle;
   String sessionDescription;
   String sessionVideo;
-  DateTime sessionDuration;
+  String sessionDuration;
   int sessionOrder;
   String sessionResource;
   String sessionLocation;

@@ -1,14 +1,17 @@
+import 'package:charuvidya/Classes/CourseProgress.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:http/http.dart' as http;
+
 
 class VideoItems extends StatefulWidget {
   final VideoPlayerController videoPlayerController;
-
+  final watchSeconds;
 
   VideoItems({
     @required this.videoPlayerController,
-    Key key,
+    @required this.watchSeconds, Key key,
   }) : super(key: key);
 
   @override
@@ -22,6 +25,7 @@ class _VideoItemsState extends State<VideoItems> {
   void initState() {
     super.initState();
     _chewieController = ChewieController(
+      startAt: Duration(seconds: widget.watchSeconds),
       videoPlayerController: widget.videoPlayerController,
       aspectRatio: 16 / 9,
       autoInitialize: true,
@@ -41,6 +45,7 @@ class _VideoItemsState extends State<VideoItems> {
   @override
   void dispose() {
     super.dispose();
+    widget.videoPlayerController.position.then((value) => print("TTTTTTTTTTTTTTTTTT ${value.inSeconds}"));
     _chewieController.dispose();
   }
 

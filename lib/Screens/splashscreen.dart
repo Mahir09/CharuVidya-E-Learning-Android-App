@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'package:charuvidya/Screens/HomeScreen/Home.dart';
 import 'package:charuvidya/Screens/HomeScreen/HomeScreen.dart';
-import 'package:charuvidya/Screens/landingpage.dart';
+import 'package:charuvidya/Screens/introscreen.dart';
 import 'package:charuvidya/Secure/Secure_id_token.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +24,6 @@ class _SplashScreenState extends State<SplashScreen> {
         context,
         PageTransition(
             child: (jwt_token != null) ? HomeScreen() : IntroScreen(), type: PageTransitionType.rightToLeftWithFade),
-            // child: LandingPage(), type: PageTransitionType.rightToLeftWithFade),
       ),
     );
     super.initState();

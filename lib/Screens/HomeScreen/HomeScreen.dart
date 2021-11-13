@@ -2,7 +2,6 @@ import 'package:charuvidya/Screens/HomeScreen/Account.dart';
 import 'package:charuvidya/Screens/HomeScreen/Home.dart';
 import 'package:charuvidya/Screens/HomeScreen/MyCourse.dart';
 import 'package:charuvidya/Screens/HomeScreen/Search.dart';
-import 'package:charuvidya/Screens/HomeScreen/Wishlist.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
           Home(),
           Search(),
           MyCourse(),
-          // Wishlist(),
           Account(),
         ],
       ),
@@ -77,14 +75,6 @@ class _HomeScreenState extends State<HomeScreen> {
               "My Course",
             ),
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(
-          //     EvaIcons.heart,
-          //   ),
-          //   title: Text(
-          //     "Wishlist",
-          //   ),
-          // ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.account_box,

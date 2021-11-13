@@ -19,6 +19,13 @@ class UserRegister {
       this.email, this.password, this.authorities, this.lanKey, this.login);
 }
 
+class UserChangePassword {
+  String currentPassword;
+  String newPassword;
+  String copyNewPassword;
+  UserChangePassword(this.currentPassword, this.newPassword, this.copyNewPassword);
+}
+
 class User {
   int id;
   String login;

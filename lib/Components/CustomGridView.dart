@@ -27,7 +27,6 @@ class CustomGridView extends StatelessWidget {
                 // builder: (context) => CourseDetail('Java Programming Language', 'Minal', '4.5', '2,000', '499', 'assets/images/java.jpeg'),
                 builder: (context) => CourseDetail(
                   courseData: jsondata[index],
-
                 ),
               ),
             );

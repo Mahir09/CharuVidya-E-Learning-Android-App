@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'package:charuvidya/Classes/CourseProgress.dart';
 import 'package:charuvidya/Classes/CourseSection.dart';
 import 'package:charuvidya/Classes/CourseSession.dart';
 import 'package:charuvidya/Components/constatns.dart' as color;
@@ -19,17 +21,25 @@ class CourseDetail extends StatefulWidget {
 }
 
 class _CourseDetailState extends State<CourseDetail> {
+  CourseSession courseSession = new CourseSession();
+  CourseSection _courseSection = new CourseSection();
+
   int courseId = 0;
   String url;
   bool _isPlaying = false;
   bool _dispose = false;
   int _isPlayingIndex = 0;
   VideoPlayerController _controller;
+  // ignore: avoid_init_to_null
+  int watchSeconds = null;
+  int updatedWatchSeconds = 0;
 
   String IDtoken = "";
   final storage = new UserSecureStorage(key: "id_token");
 
   Map<String, dynamic> data;
+
+  var courseProgressData;
 
   List videoInfo = [];
 
@@ -43,32 +53,129 @@ class _CourseDetailState extends State<CourseDetail> {
           'Accept': 'application/json',
           'Authorization': 'Bearer $IDtoken',
         });
-    print("RRRRRRRRRRRRRRRRRR  >>>> ${response.body}");
+    // print("RRRRRRRRRRRRRRRRRR  >>>> ${response.body}");
     if (response.body.isNotEmpty) {
       setState(() {
         data = json.decode(response.body);
       });
     }
-    print("RRRRRRRRRRRRRRRRRR  >>>> ${data}");
+    // print("RRRRRRRRRRRRRRRRRR  >>>> ${data}");
 
     data.forEach((key, value) {
       setState(() {
         videoInfo.addAll(value);
       });
     });
-    print("SSSSSSSSSSSSSSSSSSSS >> $videoInfo");
+    // print("SSSSSSSSSSSSSSSSSSSS >> ${videoInfo[_isPlayingIndex]['courseSection']['id']}");
+    // print("AAAAAAAAABBBBBBBBBBBBBCCCCCCCCCC ${courseSession.courseSection.id}");
+  }
+
+  _getWatchSeconds() async {
+    // API calling for course progress and getting watch seconds.
+    final courseProgressResponse = await http.get(
+        "http://117.239.83.200:9000/api/course-progresses/currentUserWatchTime/${videoInfo[_isPlayingIndex]['id']}",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $IDtoken',
+        });
+    setState(() {
+      courseProgressData = json.decode(courseProgressResponse.body);
+    });
+    print("DATA : ${courseProgressData['watchSeconds']}");
+    setState(() {
+      watchSeconds = courseProgressData['watchSeconds'];
+    });
+    print("AAAAAAAAAAAAAAAAAAAAAAAAA $watchSeconds");
+  }
+
+  _userWatchTimeAPI() async {
+    // courseSession.id = videoInfo[_isPlayingIndex]["id"];
+    // courseSession.sessionTitle = videoInfo[_isPlayingIndex]["sessionTitle"];
+    // courseSession.sessionDescription = videoInfo[_isPlayingIndex]["sessionDescription"];
+    // courseSession.sessionVideo = videoInfo[_isPlayingIndex]["sessionVideo"];
+    // courseSession.sessionDuration = videoInfo[_isPlayingIndex]["sessionDuration"];
+    // courseSession.sessionOrder = videoInfo[_isPlayingIndex]["sessionOrder"];
+    // courseSession.sessionResource = videoInfo[_isPlayingIndex]["sessionResource"];
+    // courseSession.sessionLocation = videoInfo[_isPlayingIndex]["sessionLocation"];
+    // courseSession.isPreview = videoInfo[_isPlayingIndex]["isPreview"];
+    // courseSession.isDraft = videoInfo[_isPlayingIndex]["isDraft"];
+    // courseSession.isApproved = videoInfo[_isPlayingIndex]["isApproved"];
+    // courseSession.isPublishedn = videoInfo[_isPlayingIndex]["isPublishedn"];
+    // courseSession.quizLink = videoInfo[_isPlayingIndex]["quizLink"];
+    // _courseSection.id = videoInfo[_isPlayingIndex]["courseSection"]["id"];
+    // _courseSection.sectionTitle = videoInfo[_isPlayingIndex]["courseSection"]["sectionTitle"];
+    // _courseSection.sectionDescription = videoInfo[_isPlayingIndex]["courseSection"]["sectionDescription"];
+    // _courseSection.sectionOrder = videoInfo[_isPlayingIndex]["courseSection"]["sectionOrder"];
+    // _courseSection.isDraft = videoInfo[_isPlayingIndex]["courseSection"]["isDraft"];
+    // _courseSection.isApproved = videoInfo[_isPlayingIndex]["courseSection"]["isApproved"];
+    // courseSession.courseSection = _courseSection;
+    // courseSession.courseSection.id = videoInfo[_isPlayingIndex]["courseSection"]["id"];
+    // courseSession.courseSection.sectionTitle = videoInfo[_isPlayingIndex]["courseSection"]["sectionTitle"];
+    // courseSession.courseSection.sectionDescription = videoInfo[_isPlayingIndex]["courseSection"]["sectionDescription"];
+    // courseSession.courseSection.sectionOrder = videoInfo[_isPlayingIndex]["courseSection"]["sectionOrder"];
+    // courseSession.courseSection.isDraft = videoInfo[_isPlayingIndex]["courseSection"]["isDraft"];
+    // courseSession.courseSection.isApproved = videoInfo[_isPlayingIndex]["courseSection"]["isApproved"];
+    var res = await http.post(
+      "http://117.239.83.200:9000/api/course-progresses/updateUserWatchTime",
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $IDtoken',
+      },
+      // body: json.encode(new CourseProgress(
+      //     null, false, updatedWatchSeconds, null, courseSession)),
+      body: json.encode({
+        "completed": false,
+        "watchSeconds": updatedWatchSeconds,
+        "user": null,
+        "courseSession": {
+          "id": videoInfo[_isPlayingIndex]["id"],
+          "sessionTitle": videoInfo[_isPlayingIndex]["sessionTitle"],
+          "sessionDescription": videoInfo[_isPlayingIndex]
+              ["sessionDescription"],
+          "sessionVideo": videoInfo[_isPlayingIndex]["sessionVideo"],
+          "sessionDuration": videoInfo[_isPlayingIndex]["sessionDuration"],
+          "sessionOrder": videoInfo[_isPlayingIndex]["sessionOrder"],
+          "sessionResource": videoInfo[_isPlayingIndex]["sessionResource"],
+          "sessionLocation": videoInfo[_isPlayingIndex]["sessionLocation"],
+          "isPreview": videoInfo[_isPlayingIndex]["isPreview"],
+          "isDraft": videoInfo[_isPlayingIndex]["isDraft"],
+          "isApproved": videoInfo[_isPlayingIndex]["isApproved"],
+          "isPublished": videoInfo[_isPlayingIndex]["isPublished"],
+          "quizLink": videoInfo[_isPlayingIndex]["quizLink"],
+          "courseSection": {
+            "id": videoInfo[_isPlayingIndex]["courseSection"]["id"],
+            "sectionTitle": videoInfo[_isPlayingIndex]["courseSection"]
+                ["sectionTitle"],
+            "sectionDescription": videoInfo[_isPlayingIndex]["courseSection"]
+                ["sectionDescription"],
+            "sectionOrder": videoInfo[_isPlayingIndex]["courseSection"]
+                ["sectionOrder"],
+            "isDraft": videoInfo[_isPlayingIndex]["courseSection"]["isDraft"],
+            "isApproved": videoInfo[_isPlayingIndex]["courseSection"]
+                ["isApproved"]
+          }
+        }
+      }),
+    );
+    print("UUUUUUUUUUUUURRRRRRRRRRRRRRRRRR >>> ${res.body}");
   }
 
   @override
   void initState() {
-    // print(
-    //     "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA >>>>>>>>>  ${widget.courseData}");
+    print("CCCCCCCCCCCCCCCCCCSSSSSSSSSSSSSSSSSSSSSSSSS             ");
     super.initState();
     _initData();
+    Timer.periodic(Duration(seconds: 15), (Timer t) => _userWatchTimeAPI());
   }
 
   @override
   void dispose() {
+    setState(() {
+      _controller.position.then((value) =>
+          {updatedWatchSeconds = value.inSeconds, print(value.inSeconds)});
+    });
     _dispose = true;
     _controller?.pause();
     _controller?.dispose();
@@ -231,13 +338,23 @@ class _CourseDetailState extends State<CourseDetail> {
   }
 
   _playView(BuildContext context) {
+    _getWatchSeconds();
+
     if (_controller == null) {
       _controller = VideoPlayerController.network(videoInfo[0]["sessionVideo"]);
     }
     final controller = _controller;
-    if (controller != null && controller.value.isInitialized) {
+    // controller.addListener(() {
+    //   print("VIDEO DURATION (milsec) ${controller.position.then((value) => {
+    //         print(value.inSeconds)
+    //       })}");
+    // });
+    if (controller != null &&
+        controller.value.isInitialized &&
+        watchSeconds != null) {
       return VideoItems(
         videoPlayerController: controller,
+        watchSeconds: watchSeconds,
       );
     } else {
       return AspectRatio(
@@ -275,10 +392,14 @@ class _CourseDetailState extends State<CourseDetail> {
     final old = _controller;
     _controller = controller;
     if (old != null) {
+      old.position
+          .then((value) => print("TTTTTTTTTTTTTTTTTT ${value.inSeconds}"));
       old.removeListener(_onControllerUpdate);
       old.pause();
     }
-    setState(() {});
+    setState(() {
+      _isPlayingIndex = index;
+    });
     controller
       ..initialize().then((_) {
         old?.dispose();
