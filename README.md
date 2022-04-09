@@ -2,6 +2,8 @@
 
 An E-Learning App For Charusat
 
+For more information [click here](https://mahirshekh.wordpress.com/2021/10/09/charuvidhya-e-learning-platform/) 
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
